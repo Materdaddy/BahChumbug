@@ -75,6 +75,8 @@ VixenSequenceFile::VixenSequenceFile(const char *filename)
 	// Start our buffer
 	buff[0] = 0x7E; //sync byte
 	buff[1] = 0x80; //address 0x80
+
+	gettimeofday(&time_last, NULL);
 }
 
 VixenSequenceFile::~VixenSequenceFile()
@@ -153,7 +155,6 @@ void VixenSequenceFile::addByte(unsigned char byte, VixSerial *serial)
 	if ( channel_count >= numChannels )
 	{
 		serial->write(buff, buff_offset+1);
-		usleep(49000); // wait 50 ms !!TODO!!
 
 		channel_count=0;
 
@@ -167,7 +168,6 @@ void VixenSequenceFile::addByte(unsigned char byte, VixSerial *serial)
 	else if ( channel_count % 8 == 0 )
 	{
 		serial->write(buff, buff_offset+1);
-		usleep(49000); // wait 50 ms !!TODO!!
 
 		// Set our buffer address
 		buff[1] = 0x80 + (channel_count/8);
@@ -179,6 +179,24 @@ void VixenSequenceFile::addByte(unsigned char byte, VixSerial *serial)
 void VixenSequenceFile::serializeData(VixSerial *serial)
 {
 	for (int i = 0; i < time/eventPeriod; i++)
+	{
 		for (int j = 0; j < numChannels; j++)
+		{
 			addByte(channelData[((j*time/eventPeriod)+i)], serial);
+		}
+		vixSleep();
+	}
+}
+
+void VixenSequenceFile::vixSleep(void)
+{
+	timeval time_now;
+	gettimeofday(&time_now, NULL);
+
+	if (time_last.tv_usec + (suseconds_t)(eventPeriod*100) > time_now.tv_usec)
+	{
+		usleep(time_last.tv_usec + (suseconds_t)(eventPeriod*100) - time_now.tv_usec);
+	}
+
+	gettimeofday(&time_last, NULL);
 }
