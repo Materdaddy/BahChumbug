@@ -14,8 +14,8 @@ fi
 
 AC_PROG_CXX
 
-AC_CHECK_LIB([resolv], [__b64_ntop], , [NO_RESOLV=1])
-if test ! "x$NO_RESOLV" = "x"; then
+AC_CHECK_LIB([resolv], [__b64_ntop], , [NO_RESOLV=yes])
+if test x"$NO_RESOLV" = x"yes"; then
 	AC_MSG_ERROR([BahChumbug requires libresolv for base-64 decode, which your system is missing])
 fi
 AC_CHECK_HEADERS([resolv.h])
