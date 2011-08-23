@@ -35,6 +35,7 @@ public:
 	~VixenSequenceFile();
 	void channelizeData();
 	void serializeData(VixSerial *serial);
+	char *getMusicFilename();
 
 	void debug();
 
@@ -45,6 +46,8 @@ private:
 	int eventPeriod;
 	int numChannels;
 	unsigned char *channelData;
+
+	char *audio;
 
 	void addByte(unsigned char byte, VixSerial *serial);
 

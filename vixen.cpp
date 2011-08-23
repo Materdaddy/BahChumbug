@@ -30,6 +30,7 @@ VixenSequenceFile::VixenSequenceFile(const char *filename)
 : doc(filename),
   time(0),
   eventPeriod(0),
+  audio(NULL),
   numChannels(0),
   buff_offset(1),
   channel_count(0),
@@ -52,6 +53,10 @@ VixenSequenceFile::VixenSequenceFile(const char *filename)
 	pElem = hDoc.FirstChildElement().FirstChild( "EventPeriodInMilliseconds" ).Element();
 	if ( pElem )
 		eventPeriod = atoi(pElem->GetText());
+
+	pElem = hDoc.FirstChildElement().FirstChild( "Audio" ).Element();
+	if ( pElem )
+		audio = strdup(pElem->GetText());
 
 	// Parse Channels
 	// TODO: Do we need to store these differently?  Do we care about anything but count?
@@ -81,6 +86,8 @@ VixenSequenceFile::~VixenSequenceFile()
 {
 	free(channelData);
 	channelData = NULL;
+
+	free(audio);
 }
 
 void VixenSequenceFile::debug()
@@ -181,4 +188,9 @@ void VixenSequenceFile::serializeData(VixSerial *serial)
 	for (int i = 0; i < time/eventPeriod; i++)
 		for (int j = 0; j < numChannels; j++)
 			addByte(channelData[((j*time/eventPeriod)+i)], serial);
+}
+
+char *VixenSequenceFile::getMusicFilename()
+{
+	return audio;
 }
