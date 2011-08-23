@@ -210,7 +210,12 @@ void VixenSequenceFile::vixSleep(void)
 
 	if (time_last.tv_usec + (suseconds_t)(eventPeriod*100) > time_now.tv_usec)
 	{
+		DEBUG_LOG("sleeping %u\n", (unsigned int)(time_last.tv_usec + (suseconds_t)(eventPeriod*100) - time_now.tv_usec));
 		usleep(time_last.tv_usec + (suseconds_t)(eventPeriod*100) - time_now.tv_usec);
+	}
+	else
+	{
+		DEBUG_LOG("Not sleeping %llu, %llu\n", (long long unsigned int)(time_last.tv_usec + (suseconds_t)(eventPeriod*100)), (long long unsigned int)(time_now.tv_usec));
 	}
 
 	gettimeofday(&time_last, NULL);
