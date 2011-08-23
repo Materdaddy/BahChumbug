@@ -16,7 +16,9 @@
 #ifndef __VIXEN_H__
 #define __VIXEN_H__
 
-#include <tinyxml.h>
+#include <sys/time.h> //gettimeofday/timeval
+
+#include "tinyxml.h"
 #include "serial.h"
 
 /*
@@ -47,7 +49,9 @@ private:
 	unsigned char *channelData;
 
 	void addByte(unsigned char byte, VixSerial *serial);
+	void vixSleep(void);
 
+	timeval time_last;
 	int channel_count;
 	int buff_offset;
 	unsigned char buff[MAX_BUFFER];
