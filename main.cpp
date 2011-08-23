@@ -32,4 +32,6 @@ int main(int argc, char **argv)
 
 //	file->debug();
 	file->serializeData(serial);
+	delete file;
+	delete serial;
 }
