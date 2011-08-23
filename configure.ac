@@ -1,6 +1,17 @@
 AC_INIT([BahChumbug], [0.1], [bahchumbug@matmrosko.com])
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+
+AH_TEMPLATE([CHUMDEBUG],
+	[Defined if you want to enable debug printing.])
+AC_ARG_ENABLE(debug,
+	AC_HELP_STRING([--enable-debug], [Enable debugging (default is NO)]),
+	chumdebug=yes,
+	chumdebug=no)
+if test x"$chumdebug" = x"yes"; then
+	AC_DEFINE(CHUMDEBUG)
+fi
+
 AC_PROG_CXX
 
 AC_CHECK_LIB([resolv], [__b64_ntop], , [NO_RESOLV])

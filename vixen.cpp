@@ -15,7 +15,15 @@
  */
 #include <unistd.h> //usleep
 
+#include "config.h"
 #include "vixen.h"
+
+
+#ifdef CHUMDEBUG
+#define DEBUG_LOG printf
+#else
+#define DEBUG_LOG
+#endif //DEBUG
 
 
 // http://www.lemoda.net/unix/base64/index.html

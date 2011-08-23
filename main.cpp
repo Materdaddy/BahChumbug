@@ -15,6 +15,7 @@
  */
 #include <fcntl.h>
 
+#include "config.h"
 #include "serial.h"
 #include "vixen.h"
 
@@ -30,7 +31,10 @@ int main(int argc, char **argv)
 
 	VixenSequenceFile *file = new VixenSequenceFile("test.vix");
 
-//	file->debug();
+#ifdef CHUMDEBUG
+	file->debug();
+#endif
+
 	file->serializeData(serial);
 	delete file;
 	delete serial;
