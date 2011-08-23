@@ -18,6 +18,7 @@
 #include "config.h"
 #include "serial.h"
 #include "vixen.h"
+#include "audio.h"
 
 
 int main(int argc, char **argv)
@@ -31,11 +32,19 @@ int main(int argc, char **argv)
 
 	VixenSequenceFile *file = new VixenSequenceFile("test.vix");
 
+	VixSound *snd = new VixSound(file->getMusicFilename());
+	snd->initMpg123();
+	snd->initAlsa();
+
 #ifdef CHUMDEBUG
 	file->debug();
 #endif
 
+	snd->threadAudio();
 	file->serializeData(serial);
+	snd->waitAudio();
+
+	delete snd;
 	delete file;
 	delete serial;
 }
